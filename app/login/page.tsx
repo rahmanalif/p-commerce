@@ -1,12 +1,33 @@
-import Navbar from "@/components/Navbar";
+"use client";
+
+import AuthNavbar from "@/components/AuthNavbar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import styles from "./Auth.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
+import { loginStart, loginSuccess } from "@/lib/features/authSlice";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { loading } = useSelector((state: RootState) => state.auth);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    dispatch(loginStart());
+    
+    // Simulate API call
+    setTimeout(() => {
+      dispatch(loginSuccess({ name: "User", email: "user@example.com" }));
+      router.push("/");
+    }, 1000);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <Navbar />
+      <AuthNavbar />
       
       <main className="flex-grow flex items-center justify-center py-24 px-margin-mobile md:px-margin-desktop relative overflow-hidden">
         {/* Subtle grid background effect */}
@@ -25,7 +46,7 @@ export default function LoginPage() {
             <p className="font-technical-value text-technical-value text-on-surface-variant">SECURE AUTHENTICATION PROTOCOL // PF-SYS</p>
           </div>
           
-          <form className="space-y-8">
+          <form className="space-y-8" onSubmit={handleSubmit}>
             {/* Input Group: Email */}
             <div className="relative">
               <label className="block font-technical-label text-technical-label uppercase text-on-surface mb-2 tracking-widest" htmlFor="email">
@@ -60,8 +81,12 @@ export default function LoginPage() {
             {/* Actions */}
             <div className="pt-6 space-y-4">
               <div className={styles.btn_wrapper}>
-                <button className={`${styles.auth_button} font-technical-label text-technical-label uppercase tracking-widest group`} type="submit">
-                  <span>ACCESS SYSTEM</span>
+                <button 
+                  className={`${styles.auth_button} font-technical-label text-technical-label uppercase tracking-widest group disabled:opacity-50`} 
+                  type="submit"
+                  disabled={loading}
+                >
+                  <span>{loading ? "ACCESSING..." : "ACCESS SYSTEM"}</span>
                   <span className="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">
                     arrow_forward
                   </span>

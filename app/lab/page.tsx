@@ -12,8 +12,18 @@ export default function LabPage() {
         <div className={`absolute inset-0 ${styles.grid_bg_line} opacity-20 pointer-events-none`}></div>
 
         {/* Hero Section */}
-        <header className="border-b border-outline-variant relative z-10 bg-background/90 backdrop-blur-sm">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-0">
+        <header className="border-b border-outline-variant relative z-10 overflow-hidden">
+          {/* Background Image Layer */}
+          <div className="absolute inset-0 z-0">
+            <img 
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqSkHDe0VpWnfJIiNXPhxED6FKdBsU-_45expB1rqtZ-91FJgQTZ104BJ8LMArq4-oElE3S6snPS_pSnri5kcnVzahR1i1ubUDETzL_70Mep4F4owOfNMBL_JbP9DoCnsCvIrqWNeztgYl_epY9LFffBsnPZpGYNyzPletIjC8CItF3BjMcHd_z43n6z6iS9ee2u3ItDyhc5wTkypzSLsoaey8DTKrw-qtMEiUGf38Ibf-F0PfIQcr7wrGU2O7-FBuw3iToDIFtt0" 
+              alt="Lab Backdrop"
+              className="w-full h-full object-cover grayscale opacity-30 mix-blend-multiply scale-110"
+            />
+            <div className="absolute inset-0 bg-background/80 backdrop-blur-[1px]"></div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-0 relative z-10">
             {/* Title & Intro */}
             <div className="md:col-span-8 p-margin-mobile md:p-margin-desktop py-16 md:py-32 border-b md:border-b-0 md:border-r border-outline-variant">
               <div className="flex items-center gap-4 mb-8">

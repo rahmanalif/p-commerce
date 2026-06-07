@@ -1,12 +1,33 @@
-import Navbar from "@/components/Navbar";
+"use client";
+
+import AuthNavbar from "@/components/AuthNavbar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import styles from "../login/Auth.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
+import { loginStart, loginSuccess } from "@/lib/features/authSlice";
+import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { loading } = useSelector((state: RootState) => state.auth);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    dispatch(loginStart());
+    
+    // Simulate API call
+    setTimeout(() => {
+      dispatch(loginSuccess({ name: "User", email: "user@example.com" }));
+      router.push("/");
+    }, 1000);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <Navbar />
+      <AuthNavbar />
       
       <main className="flex-grow flex items-center justify-center px-margin-mobile md:px-margin-desktop py-24 w-full max-w-container-max-width mx-auto">
         <div className="w-full max-w-md">
@@ -15,7 +36,7 @@ export default function SignupPage() {
             <p className="font-technical-value text-technical-value text-on-surface-variant uppercase">INITIALIZE YOUR SENSORY PROFILE</p>
           </div>
           
-          <form className="space-y-8">
+          <form className="space-y-8" onSubmit={handleSubmit}>
             {/* Field: FULL_NAME */}
             <div className="space-y-2">
               <label className="block font-technical-label text-technical-label text-on-surface uppercase" htmlFor="fullName">FULL_NAME</label>
@@ -63,8 +84,12 @@ export default function SignupPage() {
             {/* Actions */}
             <div className="pt-6 space-y-4">
               <div className={styles.btn_wrapper}>
-                <button className={`${styles.auth_button} font-technical-label text-technical-label uppercase tracking-widest`} type="submit">
-                  <span>INITIALIZE ACCOUNT</span>
+                <button 
+                  className={`${styles.auth_button} font-technical-label text-technical-label uppercase tracking-widest disabled:opacity-50`} 
+                  type="submit"
+                  disabled={loading}
+                >
+                  <span>{loading ? "INITIALIZING..." : "INITIALIZE ACCOUNT"}</span>
                 </button>
               </div>
               
