@@ -1,17 +1,18 @@
 import Link from "next/link";
+import Image from "next/image";
 import LabButton from "./LabButton";
 
 export default function Hero() {
   return (
     <section className="relative w-full min-h-[819px] flex flex-col items-center justify-center border-b border-grid overflow-hidden bg-surface-container-lowest">
       <div className="absolute inset-0 w-full h-full">
-        <div
-          className="w-full h-full bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage:
-              "url('https://lh3.googleusercontent.com/aida-public/AB6AXuB8xQN6SEHzzCdyY5eNSRR8xuZu41xL3mm3Gs3oGqVai2bM9DvEVRC0imOfVHJRq_y2HMhH8sxtZOdJnzp_UInVaWp2HW9Vssy5pyUk1YCgo27EbTFtruiT4kWoG1yqR_v6JMedlIwfELV0hJYlaZeRJuJpeT1uJXbTTdIHwJqrc5rcwsXinHh91YqTTPCVl2oLDv41OgU-dEju8UEKpL4qIHjsTUkxvKKa7OukJ-xXcb1zOnUNwXBDCJ5Vypz38-DyiY3rrwM8vcg')",
-          }}
-        ></div>
+        <Image
+          src="/screen.png"
+          alt="Perfume bottle in laboratory setting"
+          fill
+          priority
+          className="object-cover"
+        />
         {/* Subtle vignette/overlay for text legibility if needed */}
         <div className="absolute inset-0 bg-background/20"></div>
       </div>

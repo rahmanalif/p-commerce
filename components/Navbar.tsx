@@ -2,9 +2,24 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Prevent scrolling when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isMobileMenuOpen]);
 
   const navLinks = [
     { name: "INDEX", href: "/" },
@@ -20,6 +35,7 @@ export default function Navbar() {
         <Link
           className="font-headline-sm text-headline-sm font-bold text-on-surface tracking-tight"
           href="/"
+          onClick={() => setIsMobileMenuOpen(false)}
         >
           PERFUME FIELD
         </Link>
@@ -55,7 +71,7 @@ export default function Navbar() {
             />
           </div>
           <Link 
-            className="font-technical-label text-technical-label uppercase tracking-widest text-on-surface hover:text-primary transition-colors duration-150"
+            className="hidden md:block font-technical-label text-technical-label uppercase tracking-widest text-on-surface hover:text-primary transition-colors duration-150"
             href="/login"
           >
             LOGIN
@@ -67,16 +83,60 @@ export default function Navbar() {
             CART [0]
           </Link>
           {/* Mobile Menu Toggle */}
-          <button className="md:hidden text-on-surface focus:outline-none">
+          <button 
+            className="md:hidden text-on-surface focus:outline-none"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
             <span
               className="material-symbols-outlined"
               style={{ fontVariationSettings: "'FILL' 0" }}
             >
-              menu
+              {isMobileMenuOpen ? "close" : "menu"}
             </span>
           </button>
         </div>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 top-[65px] bg-background z-40 md:hidden flex flex-col p-margin-mobile animate-in fade-in slide-in-from-top-4 duration-200">
+          <div className="flex flex-col space-y-8 mt-8">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.name}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`font-display-lg text-headline-md font-bold tracking-tight ${
+                    isActive ? "text-primary" : "text-on-surface"
+                  }`}
+                  href={link.href}
+                >
+                  {link.name}
+                </Link>
+              );
+            })}
+            
+            <div className="pt-8 border-t border-surface-container-highest flex flex-col space-y-6">
+              <Link 
+                className="font-technical-label text-technical-label uppercase tracking-widest text-on-surface"
+                href="/login"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                LOGIN / REGISTER
+              </Link>
+              <div className="flex items-center gap-4 text-on-surface-variant border border-surface-container-highest p-4">
+                <span className="material-symbols-outlined text-[20px]">search</span>
+                <input
+                  className="bg-transparent border-none focus:ring-0 p-0 text-body-md placeholder:text-on-surface-variant w-full outline-none"
+                  placeholder="SEARCH THE COLLECTION"
+                  type="text"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
